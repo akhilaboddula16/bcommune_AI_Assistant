@@ -12,11 +12,13 @@ class DocumentChunkRepository:
         document_id: int,
         chunk_index: int,
         chunk_text: str,
+        embedding=None,
     ):
         chunk = DocumentChunk(
             document_id=document_id,
             chunk_index=chunk_index,
             chunk_text=chunk_text,
+            embedding=embedding,
         )
 
         self.db.add(chunk)

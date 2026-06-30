@@ -1,6 +1,7 @@
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, Text
-from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
+from pgvector.sqlalchemy import Vector
 
 from app.db.base import Base
 
@@ -19,6 +20,9 @@ class DocumentChunk(Base):
     chunk_index = Column(Integer, nullable=False)
 
     chunk_text = Column(Text, nullable=False)
+
+    # Embedding vector (384 dimensions)
+    embedding = Column(Vector(384), nullable=True)
 
     created_at = Column(
         DateTime(timezone=True),

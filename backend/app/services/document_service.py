@@ -1,5 +1,5 @@
 import uuid
-
+from app.services.embedding_service import EmbeddingService
 from fastapi import HTTPException, UploadFile, status
 from sqlalchemy.orm import Session
 
@@ -18,6 +18,7 @@ class DocumentService:
         self.document_repository = DocumentRepository(db)
         self.chunk_repository = DocumentChunkRepository(db)
         self.supabase = get_supabase_client()
+        self.embedding_service = EmbeddingService()
 
     def upload_pdf(
         self,
@@ -90,11 +91,16 @@ class DocumentService:
         )
 
         for index, chunk_text in enumerate(chunks):
+            embedding = self.embedding_service.generate_embedding(chunk_text)
+
             self.chunk_repository.create_chunk(
-                document_id=document.id,
-                chunk_index=index,
-                chunk_text=chunk_text,
-            )
+              document_id=document.id,
+              chunk_index=index,
+              chunk_text=chunk_text,
+              embedding=embedding,
+        )
+            
+            
 
         return {
             "id": document.id,
