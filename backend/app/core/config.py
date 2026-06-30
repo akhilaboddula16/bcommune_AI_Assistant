@@ -11,13 +11,21 @@ class Settings(BaseSettings):
 
     frontend_url: str = "http://localhost:5173"
 
+    # Database
     supabase_db_url: str
 
+    # Supabase Storage
+    supabase_url: str
+    supabase_service_role_key: str
+    supabase_storage_bucket: str = "company-documents"
+
+    # JWT
     jwt_secret_key: str
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = 30
     refresh_token_expire_days: int = 7
 
+    # AI Engine
     ai_engine_url: str
     bcom_internal_api_key: str
 
