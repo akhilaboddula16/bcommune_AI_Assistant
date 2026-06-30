@@ -8,6 +8,7 @@ from app.core.logging_config import setup_logging
 from app.api.routes.auth import router as auth_router
 from app.api.routes.admin import router as admin_router
 from app.api.routes.documents import router as documents_router
+from app.api.routes.search import router as search_router
 
 
 setup_logging()
@@ -31,6 +32,7 @@ app.include_router(db_test_router)
 app.include_router(auth_router)
 app.include_router(admin_router)
 app.include_router(documents_router)
+app.include_router(search_router)
 
 @app.get("/")
 def root():

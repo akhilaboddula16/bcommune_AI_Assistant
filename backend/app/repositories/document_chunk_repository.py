@@ -1,3 +1,4 @@
+from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from app.models.document_chunk import DocumentChunk
@@ -26,3 +27,30 @@ class DocumentChunkRepository:
         self.db.refresh(chunk)
 
         return chunk
+
+    def search_similar_chunks(
+        self,
+        embedding: list[float],
+        limit: int = 5,
+    ):
+        sql = text("""
+            SELECT
+                id,
+                document_id,
+                chunk_text,
+                embedding <=> CAST(:embedding AS vector) AS distance
+            FROM document_chunks
+            WHERE embedding IS NOT NULL
+            ORDER BY embedding <=> CAST(:embedding AS vector)
+            LIMIT :limit
+        """)
+
+        result = self.db.execute(
+            sql,
+            {
+                "embedding": str(embedding),
+                "limit": limit,
+            },
+        )
+
+        return result.mappings().all()
