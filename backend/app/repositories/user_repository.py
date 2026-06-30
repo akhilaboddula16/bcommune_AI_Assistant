@@ -61,3 +61,13 @@ class UserRepository:
 
         self.db.add(user_role)
         self.db.commit()
+        
+    def get_user_roles(self, user_id: int) -> list[str]:
+         roles = (
+            self.db.query(Role.name)
+            .join(UserRole, UserRole.role_id == Role.id)
+            .filter(UserRole.user_id == user_id)
+            .all()
+        )
+
+         return [role.name for role in roles]
